@@ -15,14 +15,18 @@ int main(void)
 	HAL_Init();
 
 	SystemClock_Config();
-	GPIO_Config();
+	GPIO_LED_Config();
+	GPIO_BTN_Config();
 
     while(1) {
-    	GPIO_WritePin(GPIO_PIN_SET);
-    	HAL_Delay(1000);
-    	GPIO_WritePin(GPIO_PIN_RESET);
-    	HAL_Delay(1000);
-//    	GPIO_TogglePin();
+    	if (GPIO_BTN_ReadPin() == GPIO_PIN_SET) {
+    		GPIO_LED_WritePin(GPIO_PIN_SET);
+    	}
+    	else {
+    	GPIO_LED_WritePin(GPIO_PIN_RESET);
+    	}
+//    	uint8_t prev_state = GPIO_BTN_ReadPin();
+//    	if (prev_state != GPIO_BTN_ReadPin()) GPIO_LED_TogglePin();
     }
 
 }
