@@ -1,0 +1,10 @@
+
+/Debug
+/Release
+/CMSIS
+/HAL
+/Startup
+*.cproject
+*.project
+*.launch
+*.ld
