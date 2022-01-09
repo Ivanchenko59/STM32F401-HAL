@@ -7,8 +7,12 @@
 
 #include "main.h"
 
+#include "gpio.h"
+#include "exti.h"
 
 void SystemClock_Config(void);
+
+uint8_t btn_interrupt_flag = 0;
 
 int main(void)
 {
@@ -17,21 +21,34 @@ int main(void)
 	SystemClock_Config();
 	GPIO_LED_Config();
 	GPIO_BTN_Config();
+	EXTI_BTN_Config();
 
     while(1) {
     	if (GPIO_BTN_ReadPin() == GPIO_PIN_SET) {
-    		GPIO_LED_WritePin(GPIO_PIN_SET);
+    		//GPIO_LED_WritePin(GPIO_PIN_SET);
     	}
     	else {
-    	GPIO_LED_WritePin(GPIO_PIN_RESET);
+    	//GPIO_LED_WritePin(GPIO_PIN_RESET);
     	}
 //    	uint8_t prev_state = GPIO_BTN_ReadPin();
 //    	if (prev_state != GPIO_BTN_ReadPin()) GPIO_LED_TogglePin();
+
+    	if (btn_interrupt_flag) {
+    		GPIO_LED_TogglePin();
+    		btn_interrupt_flag = 0;
+//    		EXTI->IMR |= EXTI_IMR_IM0;
+    	}
     }
 
 }
 
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if (GPIO_Pin == GPIO_PIN_0) {
+		btn_interrupt_flag = 1;
+//		EXTI->IMR &= ~EXTI_IMR_IM0;
+	}
+}
 
 void SystemClock_Config(void)
 {

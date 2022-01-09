@@ -12,5 +12,4 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "gpio.h"
 #endif /* INC_MAIN_H_ */
