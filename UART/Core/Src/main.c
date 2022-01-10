@@ -4,8 +4,8 @@ void SystemClock_Config(void);
 void UART1_GPIOInit(void);
 void UART1_Init(void);
 
-uint8_t data[] = "Hello UART!";
-
+uint8_t data_TX[] = "Hello UART!\n";
+uint8_t data_RX[1];
 UART_HandleTypeDef huart1;
 
 int main(void)
@@ -14,10 +14,10 @@ int main(void)
 	SystemClock_Config();
 	UART1_GPIOInit();
 	UART1_Init();
-
+	HAL_UART_Transmit(&huart1, "Hello UART TX!", 14, HAL_MAX_DELAY);
     while(1) {
-    	HAL_UART_Transmit(&huart1, data, sizeof(data), HAL_MAX_DELAY);
-    	HAL_Delay(1000);
+    	HAL_UART_Receive(&huart1, data_RX, sizeof(data_RX), HAL_MAX_DELAY);
+    	HAL_UART_Transmit(&huart1, data_RX, sizeof(data_RX), HAL_MAX_DELAY);
     }
 }
 
